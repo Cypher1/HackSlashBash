@@ -1,6 +1,6 @@
 #!/bin/bash
 
-choice "Where to" "${loc}/walk"
+choose "Where to" "${loc}/walk"
 
 if [ -z "${choice}" ]
 then

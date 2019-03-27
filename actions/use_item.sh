@@ -6,16 +6,16 @@ function use() {
   do_action "$(cat "items/$item/action")"
 }
 
-choice "Which item" "${loc}/items" "inventory"
+choose "Which item" "${loc}/items" "inventory"
 item="${choice}"
 
-if get "${loc}/items" | grep "^$item$"
+if get "${loc}/items" | grep "^$item$" > /dev/null
 then
   use "$item"
   return
 fi
 
-if get "inventory" | grep "$item"
+if get "inventory" | grep "$item" > /dev/null
 then
   use "$item"
   return

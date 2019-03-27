@@ -9,24 +9,33 @@ function put() {
   cat > "saves/${name}/$1"
 }
 
+function remove() {
+  remove=cat
+  get "$1" | grep -v "^${remove}$" | put "$1"
+}
+
 function add() {
-  mkdir -p "$(dirname "saves/${name}/$1")"
   get "$1" | put "$1"
   cat >> "saves/${name}/$1"
 }
 
 function get() {
   saved="saves/${name}/$1"
+  got=""
   if [ -f "$saved" ]
   then
-    cat $saved
-    return
+    got="$saved"
+  else
+    map="world/$1"
+    if [ -f "$map" ]
+    then
+      got="$map"
+    fi
   fi
-  map="world/$1"
-  if [ -f "$map" ]
+  if [ -f "$got" ]
   then
-    cat $map
-    return
+    cp "$got" ".tmp"
+    cat ".tmp"
   fi
 }
 
@@ -34,7 +43,7 @@ function init() {
   mkdir -p "saves"
   touch "saves/.last"
   name="$(cat "saves/.last")"
-  if echo "" | grep "^${name}$"
+  if [ -z "${name}" ]
   then
     echo "What's your name, kid?"
     read name
@@ -56,15 +65,14 @@ function do_action() {
   fi
 }
 
-function choice() {
+function choose() {
   echo "$1?"
-  get "$2" > .tmp
-  get "$3" >> .tmp
-  cat .tmp | sort | uniq > .tmp_ops
-  cat .tmp_ops | indent
+  get "$2" > ".tmp"
+  get "$3" >> ".tmp"
+  cat ".tmp" | sort | uniq | indent
   echo -n "? "
   read choice
-  if grep "^${choice}$" .tmp_ops
+  if grep "^${choice}$" ".tmp" > /dev/null
   then
     return
   else
@@ -77,12 +85,11 @@ function start_room() {
   get "$loc/description" | indent
   echo "Items:"
   get "$loc/items" | indent
- 
-  choice "What's next" "${loc}/actions" "actions" 
-  action="${choice}"
+  choose "What's next" "${loc}/actions" "actions" 
+  action="$choice"
   if [ -z "$action" ]
   then
-    echo "You try to ${action}, but it doesnt seem to work."
+    echo "Oh no, that won't work."
   else
     do_action "$action"
     return
