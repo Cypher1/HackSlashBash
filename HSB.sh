@@ -7,7 +7,7 @@ function put() {
 
 function get() {
   saved="saves/${name}/$1"
-  map="map/$1"
+  map="world/$1"
   
   if [ -f "$saved" ]
   then
