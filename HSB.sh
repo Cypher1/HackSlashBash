@@ -30,11 +30,6 @@ function get() {
   fi
 }
 
-function save() {
-  echo "${name}" > saves/.last
-  echo "${loc}" | put "loc"
-}
-
 function init() {
   mkdir -p "saves"
   touch "saves/.last"
@@ -46,10 +41,8 @@ function init() {
   else
     echo "Hi ${name}"
   fi
-
-  echo "Loading game..."
   loc="$(get "loc")"
-  save name
+  echo "${name}" > saves/.last
 }
 
 function do_action() {
@@ -98,7 +91,7 @@ function start_room() {
 
 function game() {
   start_room
-
+  game
 }
 
 init

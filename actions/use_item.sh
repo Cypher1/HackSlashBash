@@ -6,16 +6,10 @@ function use() {
   do_action "$(cat "items/$item/action")"
 }
 
-if echo "" | grep "^${item}$"
-then
-  echo "Which item?"
-  get "${loc}/items" | indent
-  get "inventory" | indent
-  echo -n "? "
-  read item
-fi
+choice "Which item" "${loc}/items" "inventory"
+item="${choice}"
 
-if get "${loc}/items" | grep "^${action}$"
+if get "${loc}/items" | grep "^$item$"
 then
   use "$item"
   return
@@ -27,4 +21,4 @@ then
   return
 fi
 
-echo "You can't figure out how to use ${item}"
+echo "You can't figure out how to use the ${item}"

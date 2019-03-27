@@ -6,5 +6,4 @@ then
 else
   echo "cat" | add "inventory"
   echo "The cat gets up and follows you"
-  echo "pet_cat" | add "actions"
 fi
