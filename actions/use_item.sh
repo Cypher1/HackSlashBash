@@ -1,24 +1,11 @@
 #!/bin/bash
 
-action=""
-
-function use() {
-  do_action "$(get "items/$item/action")"
-}
-
 choose "Which item" "${loc}/items" "inventory"
-item="${choice}"
 
-if get "${loc}/items" | grep "^$item$" > /dev/null
+if [ -z "${choice}" ]
 then
-  use "$item"
+  echo "You can't figure out how to use the ${fail}"
   return
 fi
 
-if get "inventory" | grep "$item" > /dev/null
-then
-  use "$item"
-  return
-fi
-
-echo "You can't figure out how to use the ${item}"
+do_action "$(get "items/$choice/action")"

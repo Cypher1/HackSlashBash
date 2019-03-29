@@ -1,20 +1,17 @@
 #!/bin/bash
 
-item=""
-
 function take() {
-  echo "${item}" | add "inventory"
-  echo "${item}" | remove "${loc}/items"
-  echo "You took the ${item}."
+  echo "$1" | add "inventory"
+  echo "$1" | remove "${loc}/items"
+  echo "You took the $1."
 }
 
 choose "Which item" "${loc}/items"
-item="${choice}"
 
-if get "${loc}/items" | grep "^$item$" > /dev/null
+if [ -z "$choice" ]
 then
-  take "$item"
+  echo "You can't figure out how to take the ${fail}."
   return
 fi
 
-echo "You can't figure out how to take the ${item}"
+take "$choice"
