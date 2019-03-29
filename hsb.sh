@@ -60,27 +60,33 @@ function do_action() {
   then
     source "${act}"
   else
-    echo "That doesn't seem possible."
-    echo "${act}"
+    echo "You try to ${fail}, but it doesn't work."
   fi
 }
 
 function choose() {
   echo "$1?"
-  get "$2" > ".tmp"
-  get "$3" >> ".tmp"
-  cat ".tmp" | sort | uniq | indent
+  get "$2" > ".tmp_choice"
+  get "$3" >> ".tmp_choice"
+  cat ".tmp_choice" | sort | uniq > ".tmp_ops"
+  cat ".tmp_ops" -n
   echo -n "? "
   read choice
-  if grep "^${choice}$" ".tmp" > /dev/null
+  if echo "${choice}" | grep "^[0-9][0-9]*$" > /dev/null
+  then
+    choice="$(cat ".tmp_ops" | head -n "${choice}" | tail -n 1 )"
+    return
+  fi
+  if grep "^${choice}$" ".tmp_ops" > /dev/null
   then
     return
   else
+    failed="$choice"
     choice=""
   fi
 }
 
-function start_room() {
+function game() {
   echo "----- ${loc} -----"
   get "$loc/description" | indent
   echo "Items:"
@@ -89,17 +95,15 @@ function start_room() {
   action="$choice"
   if [ -z "$action" ]
   then
-    echo "Oh no, that won't work."
+    echo "You try to ${fail} but it doesn't seem possible."
   else
     do_action "$action"
     return
   fi
 }
 
-function game() {
-  start_room
-  game
-}
-
 init
-game
+while true
+do
+  game
+done
