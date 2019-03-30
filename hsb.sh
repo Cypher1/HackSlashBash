@@ -101,9 +101,8 @@ function game() {
   get "$loc/description" | indent
   echo "Items:"
   get "$loc/items" | indent
-  choose "What's next" "${loc}/actions" "actions" 
-  action="$choice"
-  if [ -z "$action" ]
+  choose "What's next" "${loc}/actions" "actions"
+  if [ -z "$choice" ]
   then
     if echo "$fail" | grep "^quit$"
     then
@@ -116,6 +115,8 @@ function game() {
       return
     fi
     echo "You try to ${fail} but it doesn't seem possible."
+  else
+    do_action "$choice"
     return
   fi
   do_action "$action"
