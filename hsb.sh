@@ -45,8 +45,13 @@ function init() {
   name="$(cat "saves/.last")"
   if [ -z "${name}" ]
   then
-    echo "What's your name, kid?"
-    read name
+    choose_raw "What's your name, kid" "$(ls saves)"
+    if [ -z "${choice}" ]
+    then
+      name="$fail"
+    else
+      name="$choice"
+    fi
   else
     echo "Hi ${name}"
   fi
@@ -65,25 +70,30 @@ function do_action() {
 }
 
 function choose() {
-  echo "$1?"
   get "$2" > ".tmp_choice"
   get "$3" >> ".tmp_choice"
-  cat ".tmp_choice" | sort | uniq > ".tmp_ops"
-  cat ".tmp_ops" -n
+  ops="$(cat ".tmp_choice" | sort | uniq)"
+  choose_raw "$1" "$ops"
+}
+
+function choose_raw() {
+  ops="$2"
+  echo "$1?"
+  echo "$ops" | cat -n
   echo -n "? "
   read choice
   fail=""
   if echo "${choice}"|grep "^[0-9][0-9]*$" > /dev/null
   then
-    choice="$(cat ".tmp_ops" | head -n "${choice}" | tail -n 1 )"
+    choice="$(echo "$ops" | head -n "${choice}" | tail -n 1 )"
     return
   fi
-  if grep "^${choice}$" ".tmp_ops" > /dev/null
+  if echo "$ops" | grep "^${choice}$" > /dev/null
   then
     return
   fi
   fail="$choice"
-  choice=""
+  choice="$3"
 }
 
 function game() {
