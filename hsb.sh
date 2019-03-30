@@ -85,7 +85,7 @@ function choose_raw() {
   fail=""
   if echo "${choice}"|grep "^[0-9][0-9]*$" > /dev/null
   then
-    choice="$(echo "$ops" | head -n "${choice}" | tail -n 1 )"
+    choice="$(echo "$ops" | cat -n | grep "^ *${choice}[^0-9]" | sed "s/^ *[0-9]*[^0-9]//")"
     return
   fi
   if echo "$ops" | grep "^${choice}$" > /dev/null
