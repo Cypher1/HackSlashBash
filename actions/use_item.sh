@@ -3,7 +3,7 @@
 action=""
 
 function use() {
-  do_action "$(cat "items/$item/action")"
+  do_action "$(get "items/$item/action")"
 }
 
 choose "Which item" "${loc}/items" "inventory"

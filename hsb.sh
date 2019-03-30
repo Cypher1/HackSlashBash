@@ -72,7 +72,8 @@ function choose() {
   cat ".tmp_ops" -n
   echo -n "? "
   read choice
-  if echo "${choice}" | grep "^[0-9][0-9]*$" > /dev/null
+  fail=""
+  if echo "${choice}"|grep "^[0-9][0-9]*$" > /dev/null
   then
     choice="$(cat ".tmp_ops" | head -n "${choice}" | tail -n 1 )"
     return
@@ -80,10 +81,9 @@ function choose() {
   if grep "^${choice}$" ".tmp_ops" > /dev/null
   then
     return
-  else
-    failed="$choice"
-    choice=""
   fi
+  fail="$choice"
+  choice=""
 }
 
 function game() {
