@@ -95,11 +95,20 @@ function game() {
   action="$choice"
   if [ -z "$action" ]
   then
+    if echo "$fail" | grep "^quit$"
+    then
+      exit
+    fi
+    if echo "$fail" | grep "^load$"
+    then
+      rm "saves/.last"
+      init
+      return
+    fi
     echo "You try to ${fail} but it doesn't seem possible."
-  else
-    do_action "$action"
     return
   fi
+  do_action "$action"
 }
 
 init
