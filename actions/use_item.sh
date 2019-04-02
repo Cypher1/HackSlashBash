@@ -8,4 +8,6 @@ then
   return
 fi
 
-do_action "$(get "items/$choice/action")"
+item="$choice"
+do_action "$(get "items/$item/action")"
+item=""

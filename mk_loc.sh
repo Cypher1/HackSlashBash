@@ -20,7 +20,4 @@ mkdir -p "$root"
 create "$root/description"
 create "$root/items"
 create "$root/actions"
-if grep "walk" "$root/actions"
-then
-  create "$root/walk"
-fi
+create "$root/walk"

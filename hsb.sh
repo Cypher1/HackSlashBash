@@ -8,7 +8,7 @@ function put() {
 }
 
 function remove() {
-  remove=cat
+  remove="$(cat)"
   get "$1" | grep -v "^${remove}$" | put "$1"
 }
 
