@@ -7,7 +7,10 @@ function indent() {
 function choose_raw() {
   ops="$2"
   echo "$1?"
-  echo "$ops" | cat -n
+  if [ ! -z "$ops" ]
+  then
+    echo "$ops" | cat -n
+  fi
   echo -n "? "
   read choice
   fail=""
