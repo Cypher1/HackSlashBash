@@ -5,5 +5,6 @@ then
   return
 else
   echo "cat" | add "inventory"
+  echo "pet cat" | remove "${loc}/actions"
   echo "The cat gets up and follows you"
 fi

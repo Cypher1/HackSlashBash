@@ -8,8 +8,12 @@ function take() {
 
 choose "Which item" "${loc}/items"
 
-if [ -z "$choice" ]
+if [ -z "${choice}" ]
 then
+  if [ -z "${fail}" ]
+  then
+    return
+  fi
   echo "You can't figure out how to take the ${fail}."
   return
 fi
